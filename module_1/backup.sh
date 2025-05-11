@@ -1,4 +1,4 @@
-f#!/bin/bash
+fss#!/bin/bash
 
 if [ -d ~/projects ]; then
 	if [ -d /backup ]; then
