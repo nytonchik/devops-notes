@@ -1,0 +1,20 @@
+serviceAccount:
+  create: false
+  name: ""
+ingress:
+  enabled: false
+autoscaling:
+  enabled: false
+
+
+replicaCount: 1
+
+image:
+  repository: echo
+  tag: "0.5"
+
+service:
+  type: ClusterIP
+  port: 5000
+  targetPort: 5000
+
