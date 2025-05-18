@@ -1,0 +1,39 @@
+# .github/workflows/ci-cd.yml
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  REGISTRY: ${{ secrets.DOCKERHUB_USER }}/echo
+  IMAGE_TAG: ${{ github.sha }}
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: module_2/echo-api/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}:${{ env.IMAGE_TAG }}
+
+      - name: Set up Kubeconfig
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
+
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/echo-api \
+            echo-api=${{ env.REGISTRY }}:${{ env.IMAGE_TAG }} \
+            -n echo-dev
