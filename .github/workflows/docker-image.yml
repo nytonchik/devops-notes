@@ -22,8 +22,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .
-          file: module_2/echo-api/Dockerfile
+          context: module_2/echo-api            # контекст сборки — папка с Dockerfile и app.py
+          file: module_2/echo-api/Dockerfile   # путь к Dockerfile
           push: true
           tags: |
             ${{ env.REGISTRY }}:${{ env.IMAGE_TAG }}
