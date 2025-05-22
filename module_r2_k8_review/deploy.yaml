@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-review
+  namespace: echo-review # советую явно указать
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-review
+  template:
+    metadata:
+      labels:
+        app: echo-review
+    spec:
+      containers:
+        - name: docker-rewiev
+          image: nyton/echo:review
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
