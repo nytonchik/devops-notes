@@ -24,3 +24,14 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USER }}/echo:latest
             ${{ secrets.DOCKERHUB_USER }}/echo:sha-${{ github.sha }}
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: set image to minikube
+        run: |
+          kubectl set image \
+            deployment/echo-rewiev \
+            echo=nyton/echo:sha-${{ github.sha }} \
+            -n echo-rewiev
