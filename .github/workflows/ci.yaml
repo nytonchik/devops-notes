@@ -1,0 +1,26 @@
+name: Pipeline
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./module_2/docker_review
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USER }}/echo:latest
+            ${{ secrets.DOCKER_TOKEN }}/echo:sha-${{ github.sha }}
